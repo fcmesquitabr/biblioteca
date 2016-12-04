@@ -9,30 +9,28 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-public class Aluno implements Serializable{
+public class Editora implements Serializable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4904386532923371041L;
+	private static final long serialVersionUID = 7270699580854999498L;
 
 	@Id
-	@SequenceGenerator(name="aluno_id_seq", sequenceName="aluno_id_seq", allocationSize=1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="aluno_id_seq")
+	@SequenceGenerator(name="editora_id_seq", sequenceName="editora_id_seq", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="editora_id_seq")
 	private Integer id;
 	
 	private String nome;
 
 	
-	public Aluno() {
+	public Editora() {
 		super();
 	}
-		
 	
+
 	@Override
 	public String toString() {
-		return "Aluno [id=" + id + ", nome=" + nome + "]";
+		return "Editora [id=" + id + ", nome=" + nome + "]";
 	}
+
 
 	@Override
 	public int hashCode() {
@@ -42,7 +40,6 @@ public class Aluno implements Serializable{
 		return result;
 	}
 
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -51,7 +48,7 @@ public class Aluno implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Aluno other = (Aluno) obj;
+		Editora other = (Editora) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -59,7 +56,6 @@ public class Aluno implements Serializable{
 			return false;
 		return true;
 	}
-
 
 	public Integer getId() {
 		return id;
@@ -75,6 +71,6 @@ public class Aluno implements Serializable{
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}	
-	
+	}
+
 }

@@ -1,38 +1,47 @@
 package br.fa7.biblioteca.model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-public class Aluno implements Serializable{
+public class Autor implements Serializable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4904386532923371041L;
+	private static final long serialVersionUID = -2634274691772872144L;
 
 	@Id
-	@SequenceGenerator(name="aluno_id_seq", sequenceName="aluno_id_seq", allocationSize=1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="aluno_id_seq")
+	@SequenceGenerator(name="autor_id_seq", sequenceName="autor_id_seq", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="autor_id_seq")
 	private Integer id;
 	
 	private String nome;
 
-	
-	public Aluno() {
+	@ManyToMany(
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+			mappedBy = "autores",
+			fetch = FetchType.LAZY,
+			targetEntity = Livro.class
+		)
+	private List<Livro> medicos;	
+
+	public Autor() {
 		super();
 	}
-		
+
 	
 	@Override
 	public String toString() {
-		return "Aluno [id=" + id + ", nome=" + nome + "]";
+		return "Autor [id=" + id + ", nome=" + nome + "]";
 	}
+
 
 	@Override
 	public int hashCode() {
@@ -42,7 +51,6 @@ public class Aluno implements Serializable{
 		return result;
 	}
 
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -51,7 +59,7 @@ public class Aluno implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Aluno other = (Aluno) obj;
+		Autor other = (Autor) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -59,7 +67,6 @@ public class Aluno implements Serializable{
 			return false;
 		return true;
 	}
-
 
 	public Integer getId() {
 		return id;

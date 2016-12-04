@@ -7,17 +7,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import br.fa7.biblioteca.model.Aluno;
+import br.fa7.biblioteca.model.Livro;
 
 @Stateless
-public class ReservaService {
+public class LivroService {
 
 	@PersistenceContext(unitName="biblioteca")
 	private EntityManager em;
-	
+
 	@SuppressWarnings("unchecked")
-	public List<Aluno> listar(){
-		Query query = em.createQuery("SELECT a from Aluno a");
+	public List<Livro> listar(){
+		//Query query = em.createQuery("SELECT l from Livro l LEFT JOIN FETCH l.autores");
+		Query query = em.createQuery("SELECT l from Livro l");
 		return query.getResultList();
 	}
 }
