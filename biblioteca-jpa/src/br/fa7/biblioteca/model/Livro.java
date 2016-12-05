@@ -34,6 +34,12 @@ public class Livro implements Serializable{
 	
 	private String descricao;
 
+	private String edicao;
+	
+	private Integer quantidade;
+	
+	private Integer quantidadeDisponivel;
+	
 	@ManyToOne
 	@JoinColumn(name = "editoraid")
 	private Editora editora;
@@ -134,5 +140,29 @@ public class Livro implements Serializable{
 
 	public void setAutores(List<Autor> autores) {
 		this.autores = autores;
-	}			
+	}
+
+	public String getEdicao() {
+		return edicao;
+	}
+
+	public void setEdicao(String edicao) {
+		this.edicao = edicao;
+	}
+
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public Integer getQuantidadeDisponivel() {
+		return quantidadeDisponivel;
+	}
+
+	public void setQuantidadeDisponivel(Integer quantidadeDisponivel) {
+		this.quantidadeDisponivel = quantidadeDisponivel;
+	}				
 }
