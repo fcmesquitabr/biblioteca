@@ -10,21 +10,21 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import br.fa7.biblioteca.model.Livro;
-import br.fa7.biblioteca.service.LivroService;
+import br.fa7.biblioteca.model.Pedido;
+import br.fa7.biblioteca.service.PedidoService;
 
-@Path("livros")
+@Path("pedido")
 @RequestScoped
-public class LivroRest {
+public class PedidoRest {
 
 	@Inject
-	private LivroService livroService;
+	private PedidoService pedidoService;
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Livro> listar() {
-		if(livroService !=null){			
-			return livroService.list();
+	public List<Pedido> listar() {
+		if(pedidoService !=null){			
+			return pedidoService.list();
 		}
 		return new ArrayList<>();
 	}

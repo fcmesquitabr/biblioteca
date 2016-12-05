@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html ng-app="biblioteca">
+<head>
+<meta charset="ISO-8859-1">
+<title>Página Inicial - Biblioteca</title>
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="js/angular.min.js" ></script>
+<script type="text/javascript" src="js/controllers/livroController.js"></script>
+
+</head>
+
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Biblioteca</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Livros</a></li>
+          <li><a href="#reservas">Reservas</a></li>
+          <li><a href="#sugestoes">Sugestões</a></li>
+          <li><a href="#pedidos">Pedidos</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li class="dropdown-header">Nav header</li>
+              <li><a href="#">Separated link</a></li>
+              <li><a href="#">One more separated link</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container">
+<div class="page-header">
+	<h2>Catálogo de Livros</h2>
+</div>	
+<div ng-controller="Livro">
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+			<th>ID</th>
+			<th>Título</th>
+			<th>Editora</th>
+			<th>Edição</th>
+			<th>Qtde Total</th>
+			<th>Qtde Disponível</th>
+			<th>Ações</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat-start="livro in livros">
+				<td>{{livro.id}}</td>
+				<td>{{livro.titulo}}</td>
+				<td>{{livro.editora.nome}}</td>
+				<td>{{livro.edicao}}</td>
+				<td>{{livro.quantidade}}</td>
+				<td>{{livro.quantidadeDisponivel}}</td>
+				<td>
+					<button class="btn btn-xs btn-default" data-toggle="collapse" 
+						ng-attr-data-target="{{ '#linha-' + livro.id }}">							
+						Detalhes
+					</button>
+
+					<button class="btn btn-xs btn-default" 
+							ng-click="sugerirLivro(livro)"
+							ng-disabled="livro.estaSugerido==true">							
+								Sugerir
+					</button>
+					<button class="btn btn-xs btn-default" 
+							ng-click="reservarLivro(livro)"
+							ng-disabled="livro.estaReservado==true">
+								Reservar
+					</button>
+				</td>
+			</tr>
+			<tr ng-repeat-end ng-attr-id="{{ 'linha-' + livro.id }}" class="collapse">
+				<td colspan="7">
+					Descrição: {{livro.descricao}} <br />
+					Autores: 
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+	<div class="row">
+	<div class="col-md-4">
+		<div class="panel panel-primary"> 
+			<div class="panel-heading"> 
+				<h3 class="panel-title">Minhas Reservas</h3> 
+			</div> 
+			<div class="panel-body"> 
+				<div class="list-group" ng-show="reservas.length > 0">
+				  <div class="list-group-item" ng-repeat="reserva in reservas">
+				  	<span>{{reserva.titulo}}</span>
+				  	<button style="float: right;" 
+				  		class="btn btn-xs btn-danger glyphicon glyphicon-trash"
+				  		ng-click="removerReserva(reserva)">
+				  	</button>
+				  </div>				
+				</div>
+				<h3 ng-show="reservas.length == 0">Não há reservas realizadas</h3>
+			</div> 
+			<div class="panel-footer">
+				<button class="btn btn-primary" ng-click="enviarReserva()">Enviar</button>
+				<button class="btn btn-danger" ng-click="cancelarReservas()">Cancelar</button>
+			</div>	
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="panel panel-primary"> 
+			<div class="panel-heading"> 
+				<h3 class="panel-title">Minhas Sugestões</h3> 
+			</div> 
+			<div class="panel-body"> 
+				<div class="list-group" ng-show="sugestoes.length > 0">
+				  <div class="list-group-item" ng-repeat="sugestao in sugestoes">
+				  	<span>{{sugestao.titulo}}</span>
+				  	<button style="float: right;" 
+				  		class="btn btn-xs btn-danger glyphicon glyphicon-trash"
+				  		ng-click="removerSugestao(sugestao)">
+				  	</button>
+				  </div>				
+				</div>
+				<h3 ng-show="sugestoes.length == 0">Não há sugestões realizadas</h3> 
+			</div> 
+			<div class="panel-footer">
+				<button class="btn btn-primary">Enviar</button>
+				<button class="btn btn-danger" ng-click="cancelarSugestoes()">Cancelar</button>
+			</div>
+		</div>		
+	</div>
+	</div>
+	  
+</div>
+</div>
+</body>
+</html>
