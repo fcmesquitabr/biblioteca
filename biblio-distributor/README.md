@@ -5,6 +5,9 @@ Graduation project
 - Spring boot
 - ActiveMQ
 - Postgres
+- JPA
+- Spring Data
+- Rest API (Json)
 
 
 #Request example
