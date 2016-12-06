@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="true">
+
+    <property name="LOG_PATH" value="biblio-distributor-producer/logs/"/>
+    <property name="DEFAULT_MAX_FILE_SIZE" value="100MB"/>
+    <property name="DEFAULT_MAX_HISTORY" value="100"/>
+    <property name="DEFAULT_ASYNC_QUEUE_SIZE" value="500"/>
+    <property name="DEFAULT_PATTERN"
+              value="%highlight([%-5level]) %magenta([%date{ISO8601}] [%X{stamp}] [%class{1}->%method:%line]) | %msg%n"/>
+    <property name="EXCEPTION_PATTERN"
+              value="%highlight([%-5level]) %magenta([%date{ISO8601}] [%X{stamp}] [%class->%method:%line]) [Exception %msg - Thread Id %thread - Start]%n%xException{8}%n[Exception %msg - End]%n"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are by default assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <encoder>
+            <pattern>${DEFAULT_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ap_exceptions" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}exceptions.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${LOG_PATH}exceptions.log.k1y-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${DEFAULT_MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${DEFAULT_MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${EXCEPTION_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ap_exceptions_async" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>${DEFAULT_ASYNC_QUEUE_SIZE}</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="ap_exceptions"/>
+    </appender>
+
+    <appender name="ap_spring" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}spring.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${LOG_PATH}spring.log.k1y-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${DEFAULT_MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${DEFAULT_MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${DEFAULT_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ap_spring_async" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>${DEFAULT_ASYNC_QUEUE_SIZE}</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="ap_spring"/>
+    </appender>
+
+    <appender name="ap_system" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}system.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${LOG_PATH}system.log.k1y-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${DEFAULT_MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${DEFAULT_MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${DEFAULT_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ap_system_async" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>${DEFAULT_ASYNC_QUEUE_SIZE}</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="ap_system"/>
+    </appender>
+
+    <appender name="ap_stdout" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}stdout.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${LOG_PATH}stdout.log.k1y-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${DEFAULT_MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${DEFAULT_MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${DEFAULT_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ap_stderr" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}stderr.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${LOG_PATH}stderr.log.k1y-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${DEFAULT_MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${DEFAULT_MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${DEFAULT_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="exceptions" level="ALL" additivity="false">
+        <appender-ref ref="ap_exceptions_async"/>
+    </logger>
+
+    <logger name="org.springframework" level="INFO" additivity="false">
+        <appender-ref ref="ap_spring_async"/>
+    </logger>
+
+    <logger name="system" level="ALL" additivity="false">
+        <appender-ref ref="ap_system_async"/>
+    </logger>
+
+    <logger name="org.apache" level="INFO" additivity="false">
+        <appender-ref ref="ap_system_async"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
