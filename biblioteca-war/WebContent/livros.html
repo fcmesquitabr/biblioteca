@@ -1,0 +1,101 @@
+<div class="page-header">
+	<h2>Cat&aacute;logo de Livros</h2>
+</div>	
+<div ng-controller="livroController">
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+			<th>ID</th>
+			<th>T&iacute;tulo</th>
+			<th>Editora</th>
+			<th>Edi&ccedil;&atilde;o</th>			
+			<th>Qtde Total</th>
+			<th>Qtde Dispon&iacute;vel</th>
+			<th>A&ccedil;&otilde;es</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat-start="livro in livros">
+				<td>{{livro.id}}</td>
+				<td>{{livro.titulo}}</td>
+				<td>{{livro.editora.nome}}</td>
+				<td>{{livro.edicao}}</td>
+				<td>{{livro.quantidade}}</td>
+				<td>{{livro.quantidadeDisponivel}}</td>
+				<td>
+					<button class="btn btn-xs btn-default" data-toggle="collapse" 
+						ng-attr-data-target="{{ '#linha-' + livro.id }}">							
+						Detalhes
+					</button>
+
+					<button class="btn btn-xs btn-default" 
+							ng-click="sugerirLivro(livro)"
+							ng-disabled="livro.estaSugerido==true">							
+								Sugerir
+					</button>
+					<button class="btn btn-xs btn-default" 
+							ng-click="reservarLivro(livro)"
+							ng-disabled="livro.estaReservado==true">
+								Reservar
+					</button>
+				</td>
+			</tr>
+			<tr ng-repeat-end ng-attr-id="{{ 'linha-' + livro.id }}" class="collapse">
+				<td colspan="7">
+					Descriç&atilde;o: {{livro.descricao}} <br />
+					Autores: 
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+	<div class="row">
+	<div class="col-md-4">
+		<div class="panel panel-primary"> 
+			<div class="panel-heading"> 
+				<h3 class="panel-title">Minhas Reservas</h3> 
+			</div> 
+			<div class="panel-body"> 
+				<div class="list-group" ng-show="reservas.length > 0">
+				  <div class="list-group-item" ng-repeat="reserva in reservas">
+				  	<span>{{reserva.titulo}}</span>
+				  	<button style="float: right;" 
+				  		class="btn btn-xs btn-danger glyphicon glyphicon-trash"
+				  		ng-click="removerReserva(reserva)">
+				  	</button>
+				  </div>				
+				</div>
+				<h3 ng-show="reservas.length == 0">N&atilde;o h&aacute; reservas realizadas</h3>
+			</div> 
+			<div class="panel-footer">
+				<button class="btn btn-primary" ng-click="enviarReserva()">Enviar</button>
+				<button class="btn btn-danger" ng-click="cancelarReservas()">Cancelar</button>
+			</div>	
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="panel panel-primary"> 
+			<div class="panel-heading"> 
+				<h3 class="panel-title">Minhas Sugest&otilde;es</h3> 
+			</div> 
+			<div class="panel-body"> 
+				<div class="list-group" ng-show="sugestoes.length > 0">
+				  <div class="list-group-item" ng-repeat="sugestao in sugestoes">
+				  	<span>{{sugestao.titulo}}</span>
+				  	<button style="float: right;" 
+				  		class="btn btn-xs btn-danger glyphicon glyphicon-trash"
+				  		ng-click="removerSugestao(sugestao)">
+				  	</button>
+				  </div>				
+				</div>
+				<h3 ng-show="sugestoes.length == 0">N&atilde;o h&aacute; sugest&otilde;es realizadas</h3> 
+			</div> 
+			<div class="panel-footer">
+				<button class="btn btn-primary">Enviar</button>
+				<button class="btn btn-danger" ng-click="cancelarSugestoes()">Cancelar</button>
+			</div>
+		</div>		
+	</div>
+	</div>
+	  
+</div>

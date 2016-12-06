@@ -1,5 +1,5 @@
-angular.module('biblioteca', [])
-	.controller('Livro', function($scope, $http) {
+moduleBiblioteca
+	.controller('livroController', function($scope, $http) {
 		$scope.sugestoes = [];
 		$scope.reservas = [];
 		
