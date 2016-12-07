@@ -1,6 +1,7 @@
 package br.fa7.biblioteca.rest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -53,13 +54,19 @@ public class ReservaRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response inserir(ReservaLivro[] body) {
 		try {
-			if(body!=null && body.length>0){
-				ReservaLivro reserva = reservaService.insert(body[0]);
-				String url = "/api/reservas/" + reserva.getId();
-				return Response.status(Status.CREATED).header("Location", url).entity(reserva.getId()).build();				
-			}else{
-				throw new NotFoundException();
+			if(body == null || body.length == 0){
+				return Response.ok().build();
 			}
+			
+			List<Integer> entitiesId = new ArrayList<>();
+			for (ReservaLivro reservaLivro : body) {
+				reservaLivro.setDataRealizacao(new Date());
+				ReservaLivro reserva = reservaService.insert(reservaLivro);
+				entitiesId.add(reserva.getId());
+				
+			}
+			String url = "/api/reservas/";
+			return Response.status(Status.CREATED).header("Location", url).entity(entitiesId).build();				
 		} catch (Exception e) {
 			return tratarException(e);
 		}

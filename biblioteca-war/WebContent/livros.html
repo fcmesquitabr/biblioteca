@@ -30,12 +30,12 @@
 
 					<button class="btn btn-xs btn-default" 
 							ng-click="sugerirLivro(livro)"
-							ng-disabled="livro.estaSugerido==true">							
+							ng-disabled="isSugerido(livro)==true">							
 								Sugerir
 					</button>
 					<button class="btn btn-xs btn-default" 
 							ng-click="reservarLivro(livro)"
-							ng-disabled="livro.estaReservado==true">
+							ng-disabled="isReservado(livro)==true">
 								Reservar
 					</button>
 				</td>
@@ -50,48 +50,73 @@
 		</tbody>
 	</table>
 	<div class="row">
-	<div class="col-md-4">
+	<div class="col-md-6">
 		<div class="panel panel-primary"> 
 			<div class="panel-heading"> 
 				<h3 class="panel-title">Minhas Reservas</h3> 
 			</div> 
-			<div class="panel-body"> 
-				<div class="list-group" ng-show="reservas.length > 0">
-				  <div class="list-group-item" ng-repeat="reserva in reservas">
-				  	<span>{{reserva.titulo}}</span>
-				  	<button style="float: right;" 
-				  		class="btn btn-xs btn-danger glyphicon glyphicon-trash"
-				  		ng-click="removerReserva(reserva)">
-				  	</button>
-				  </div>				
-				</div>
+			<div class="panel-body">
+				<table class="table table-bordered table-striped" ng-show="reservas.length > 0">
+					<thead>
+						<tr>
+							<th>Livro</th>
+							<th>Status</th>
+							<th> </th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="reserva in reservas">
+							<td>{{reserva.livro.titulo}}</td>
+							<td>{{reserva.id==null ? 'Pendente' : 'Confirmada'}}</td>
+							<td>
+								<button style="float: right;"
+									class="btn btn-xs btn-danger glyphicon glyphicon-trash"
+									ng-click="removerReserva(reserva)"></button>
+
+							</td>
+						</tr>
+					</tbody>
+				</table>
+	
 				<h3 ng-show="reservas.length == 0">N&atilde;o h&aacute; reservas realizadas</h3>
 			</div> 
 			<div class="panel-footer">
-				<button class="btn btn-primary" ng-click="enviarReserva()">Enviar</button>
+				<button class="btn btn-primary" ng-click="enviarReservas()">Enviar</button>
 				<button class="btn btn-danger" ng-click="cancelarReservas()">Cancelar</button>
 			</div>	
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-6">
 		<div class="panel panel-primary"> 
 			<div class="panel-heading"> 
 				<h3 class="panel-title">Minhas Sugest&otilde;es</h3> 
 			</div> 
 			<div class="panel-body"> 
-				<div class="list-group" ng-show="sugestoes.length > 0">
-				  <div class="list-group-item" ng-repeat="sugestao in sugestoes">
-				  	<span>{{sugestao.titulo}}</span>
-				  	<button style="float: right;" 
-				  		class="btn btn-xs btn-danger glyphicon glyphicon-trash"
-				  		ng-click="removerSugestao(sugestao)">
-				  	</button>
-				  </div>				
-				</div>
+				<table class="table table-bordered table-striped" ng-show="sugestoes.length > 0">
+					<thead>
+						<tr>
+							<th>Livro</th>
+							<th>Status</th>
+							<th> </th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="sugestao in sugestoes">
+							<td>{{sugestao.livro.titulo}}</td>
+							<td>{{sugestao.id==null ? 'Pendente' : 'Confirmada'}}</td>
+							<td>
+								<button style="float: right;"
+									class="btn btn-xs btn-danger glyphicon glyphicon-trash"
+									ng-click="removerSugestao(sugestao)"></button>
+
+							</td>
+						</tr>
+					</tbody>
+				</table>
 				<h3 ng-show="sugestoes.length == 0">N&atilde;o h&aacute; sugest&otilde;es realizadas</h3> 
 			</div> 
 			<div class="panel-footer">
-				<button class="btn btn-primary">Enviar</button>
+				<button class="btn btn-primary" ng-click="enviarSugestoes()">Enviar</button>
 				<button class="btn btn-danger" ng-click="cancelarSugestoes()">Cancelar</button>
 			</div>
 		</div>		

@@ -1,84 +1,154 @@
 moduleBiblioteca
 	.controller('livroController', function($scope, $http) {
-		$scope.sugestoes = [];
-		$scope.reservas = [];
+		
+		$scope.aluno = {id:1};
 		
 		$http.get('api/livros').
 	        then(function(response) {
 	            $scope.livros = response.data;
-	            for(var i=0; i< $scope.livros.length; i++) {
-	            	var livro = $scope.livros[i]; 
-	            	livro.estaReservado=false;
-	            	livro.estaSugerido=false;
-	            }
 	        });
-		
-		$scope.enviarReserva = function(){
-			$http.post('api/reservas',$scope.getReservas()).
+
+		$http.get('api/reservas').
+	        then(function(response) {
+	            $scope.reservas = response.data;
+	        });
+
+		$http.get('api/sugestao').
+	        then(function(response) {
+	            $scope.sugestoes = response.data;
+	        });
+
+		$scope.isReservado = function(livro){
+			for(var i=0; i< $scope.reservas.length; i++) {
+				var reserva = $scope.reservas[i];
+				if(reserva.livro.id == livro.id){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		$scope.isSugerido = function(livro){
+			for(var i=0; i< $scope.sugestoes.length; i++) {
+				var sugestao = $scope.sugestoes[i];
+				if(sugestao.livro.id == livro.id){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		$scope.enviarReservas = function(){
+			$http.post('api/reservas',$scope.getReservasPendentes()).
 				then(function(response) {
 					console.log("Sucesso");
+					$http.get('api/reservas').
+				        then(function(response) {
+				            $scope.reservas = response.data;
+				        });					
 				}, function(response) {
 					console.log("Erro");
 				});
 		}
 		
-		$scope.getReservas = function(){
+		$scope.getReservasPendentes = function(){
 			var reservas=[];
 			for(var i=0; i< $scope.reservas.length; i++) {
-				var reservaLivro = {};
-				var livro = $scope.reservas[i];
-            	reservaLivro.livro = {};
-            	reservaLivro.livro.id=livro.id;
-            	reservaLivro.aluno = {};
-            	reservaLivro.aluno.id=1;
-            	reservas.push(reservaLivro);
+				var reservaLivro = $scope.reservas[i];
+				if(reservaLivro.id == null){
+					reservas.push(reservaLivro);					
+				}
 	        }
 			return reservas;
 		}
-		
+
+		$scope.enviarSugestoes = function(){
+			$http.post('api/sugestao',$scope.getSugestoesPendentes()).
+				then(function(response) {
+					console.log("Sucesso");
+					$http.get('api/sugestao').
+			        then(function(response) {
+			            $scope.sugestoes = response.data;
+			        });					
+				}, function(response) {
+					console.log("Erro");
+				});
+		}
+
+		$scope.getSugestoesPendentes = function(){
+			var sugestoes=[];
+			for(var i=0; i< $scope.sugestoes.length; i++) {
+				var sugestaoLivro = $scope.sugestoes[i];
+				if(sugestaoLivro.id == null){
+					sugestoes.push(sugestaoLivro);					
+				}
+	        }
+			return sugestoes;
+		}
+
 		$scope.sugerirLivro = function(livro){
-			livro.estaSugerido=true;
-			if($scope.sugestoes.indexOf(livro) == -1){
-				$scope.sugestoes.push(livro);				
+			var sugestaoLivro = {};
+			sugestaoLivro.livro=livro;
+			sugestaoLivro.aluno=$scope.aluno;
+
+			if($scope.sugestoes.indexOf(sugestaoLivro) == -1){
+				$scope.sugestoes.push(sugestaoLivro);				
 			}
 		}
 		
 		$scope.reservarLivro = function(livro){
-			livro.estaReservado=true;
-			if($scope.reservas.indexOf(livro) == -1){
-				$scope.reservas.push(livro);				
+			var reservaLivro = {};
+			reservaLivro.livro=livro;
+			reservaLivro.aluno=$scope.aluno;
+
+			if($scope.reservas.indexOf(reservaLivro) == -1){
+				$scope.reservas.push(reservaLivro);				
 			}
 		} 
 
-		$scope.removerReserva = function(livro){
-			livro.estaReservado=false;
-			var index = $scope.reservas.indexOf(livro);
+		$scope.removerReserva = function(reserva){
+			if(reserva.id!=null){
+				$http.delete('api/reservas/' + reserva.id).
+					then(function(response) {
+						console.log("Sucesso");
+					}, function(response) {
+						console.log("Erro");
+					});				
+			}
+			var index = $scope.reservas.indexOf(reserva);
 			if(index >= 0){
 				$scope.reservas.splice(index,1);				
 			}
 		}
 
-		$scope.removerSugestao = function(livro){
-			livro.estaSugerido=false;
-			var index = $scope.sugestoes.indexOf(livro);
+		$scope.removerSugestao = function(sugestao){
+			if(sugestao.id!=null){
+				$http.delete('api/sugestao/' + sugestao.id).
+					then(function(response) {
+						console.log("Sucesso");
+					}, function(response) {
+						console.log("Erro");
+					});				
+			}
+			var index = $scope.sugestoes.indexOf(sugestao);
 			if(index >= 0){
 				$scope.sugestoes.splice(index,1);				
 			}
 		}
 		
 		$scope.cancelarSugestoes = function(){
-			$scope.sugestoes = [];
-            for(var i=0; i< $scope.livros.length; i++) {
-            	var livro = $scope.livros[i]; 
-            	livro.estaSugerido=false;
+			var copiaSugestoes = $scope.sugestoes.slice();
+            for(var i=0; i< copiaSugestoes.length; i++) {
+            	var sugestao = copiaSugestoes[i]; 
+            	$scope.removerSugestao(sugestao);
             }
 		}
 		
 		$scope.cancelarReservas = function(){
-			$scope.reservas = [];
-            for(var i=0; i< $scope.livros.length; i++) {
-            	var livro = $scope.livros[i]; 
-            	livro.estaReservado=false;
+			var copiaReservas = $scope.reservas.slice();
+            for(var i=0; i< copiaReservas.length; i++) {
+            	var reserva = copiaReservas[i]; 
+            	$scope.removerReserva(reserva);
             }
 		}
 
