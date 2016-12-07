@@ -6,10 +6,12 @@ public class ResponseTO {
 
     private final Boolean success;
     private final String message;
+    private final String orderId;
 
-    public ResponseTO(Boolean success, String message) {
+    public ResponseTO(Boolean success, String message, String orderId) {
         this.success = success;
         this.message = message;
+        this.orderId = orderId;
     }
 
     public Boolean getSuccess() {
@@ -18,6 +20,10 @@ public class ResponseTO {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getOrderId() {
+        return orderId;
     }
 
     @Override

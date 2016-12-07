@@ -28,6 +28,8 @@ public class Order implements Serializable {
     private Long clientId;
     private String callBackUrl;
     private Date requestDate;
+    private String clientOrderId;
+    private String orderId;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "order", fetch = FetchType.LAZY)
     private List<Item> items;
@@ -39,6 +41,8 @@ public class Order implements Serializable {
         this.clientId = order.getClientId();
         this.callBackUrl = order.getCallBackUrl();
         this.items = order.getItems().stream().map(i -> new Item(i, this)).collect(Collectors.toList());
+        this.orderId = order.getOrderId();
+        this.clientOrderId = order.getClientOrderId();
     }
 
     public Long getId() {
@@ -79,6 +83,22 @@ public class Order implements Serializable {
 
     public void setRequestDate(Date requestDate) {
         this.requestDate = requestDate;
+    }
+
+    public String getClientOrderId() {
+        return clientOrderId;
+    }
+
+    public void setClientOrderId(String clientOrderId) {
+        this.clientOrderId = clientOrderId;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     @Override

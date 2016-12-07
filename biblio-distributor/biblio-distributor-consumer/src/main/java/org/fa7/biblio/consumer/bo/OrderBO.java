@@ -43,6 +43,10 @@ public class OrderBO {
             SYSTEM_LOGGER.error("Not found items!");
             return;
         }
+        if (CollectionUtils.isNotEmpty(orderRepository.findByClientOrderId(order.getClientOrderId()))){
+            SYSTEM_LOGGER.error("Order already processed!");
+            return;
+        }
 
         List<Item> processedItems = new ArrayList<>(order.getItems().size());
         processOrder(order, processedItems);
@@ -54,7 +58,11 @@ public class OrderBO {
         org.fa7.biblio.consumer.bean.Order orderEntity = new org.fa7.biblio.consumer.bean.Order(order);
         orderEntity.getItems().forEach(o -> {
             Optional<Item> item = processedItems.stream().filter(pi -> pi.getIsbn().longValue() == o.getIsbn().longValue()).findFirst();
-            item.ifPresent(i -> o.setAmountResponse(i.getAmount()));
+            if (item.isPresent()){
+                o.setAmountResponse(item.get().getAmount());
+            }else{
+                o.setAmountResponse(0);
+            }
         });
         orderEntity.setRequestDate(new Date());
         orderRepository.save(orderEntity);

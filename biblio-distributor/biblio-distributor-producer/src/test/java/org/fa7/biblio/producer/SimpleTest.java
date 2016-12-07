@@ -25,7 +25,7 @@ public class SimpleTest {
         Collection<Item> items = new ArrayList<>(1);
         items.add(new Item(1234567890L, 10));
         items.add(new Item(987654321L, 5));
-        Order order = new Order(1L, 1L, "callBackUrl", items);
+        Order order = new Order(1L, "callBackUrl", items);
         jmsService.purchaseOrderRequest(order);
     }
 

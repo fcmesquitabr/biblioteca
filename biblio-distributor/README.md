@@ -5,15 +5,13 @@ Graduation project
 - Spring boot
 - ActiveMQ
 - Postgres
-- JPA
-- Spring Data
-- Rest API (Json)
 
 
 #Request example
 {
   "clientId": 12345,
   "callBackUrl": "http://localhost:8080/biblio/ordercallback",
+  "clientOrderId": "123456",
   "items": [
     {
       "isbn": 123,

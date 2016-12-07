@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @Service
 public class OrderBO {
@@ -24,12 +25,13 @@ public class OrderBO {
     private JmsService jmsService;
 
     public ResponseTO processAndSend(Order order) {
-        ResponseTO response = new ResponseTO(false, "fail to process order");
+        ResponseTO response = new ResponseTO(false, "fail to process order", StringUtils.EMPTY);
         validate(order.getClientId(), order.getCallBackUrl(), order.getItems());
 
         try {
+            order.setOrderId(UUID.randomUUID().toString());
             jmsService.purchaseOrderRequest(order);
-            response = new ResponseTO(true, "process order on queue");
+            response = new ResponseTO(true, "process order on queue", order.getOrderId());
             SYSTEM_LOGGER.info("process order [{}] on queue", order);
         } catch (Exception e) {
             EXCEPTION_LOGGER.error("fail to process order [{}]", order, e);

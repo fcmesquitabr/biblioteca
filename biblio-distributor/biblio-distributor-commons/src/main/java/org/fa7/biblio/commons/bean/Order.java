@@ -5,14 +5,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.UUID;
 
 public class Order implements Serializable {
 
     private static final long serialVersionUID = 1084323863712019997L;
 
-    private Long id;
     private Long clientId;
     private String callBackUrl;
+    private String clientOrderId;
+    private String orderId;
     private Collection<Item> items;
 
     public Order() {
@@ -22,17 +24,6 @@ public class Order implements Serializable {
         this.clientId = clientId;
         this.callBackUrl = callBackUrl;
         this.items = items;
-    }
-
-    public Order(Long id, Long clientId, String callBackUrl, Collection<Item> items) {
-        this.id = id;
-        this.clientId = clientId;
-        this.callBackUrl = callBackUrl;
-        this.items = items;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public Long getClientId() {
@@ -45,6 +36,18 @@ public class Order implements Serializable {
 
     public Collection<Item> getItems() {
         return items;
+    }
+
+    public String getClientOrderId() {
+        return clientOrderId;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     @Override

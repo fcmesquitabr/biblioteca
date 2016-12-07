@@ -13,6 +13,7 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Long>
 
     Collection<Order> findByClientId(@Param("clientId") Long clientId);
 
+    Collection<Order> findByClientOrderId(@Param("clientOrderId") String clientOrderId);
 }
 
 

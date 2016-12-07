@@ -1,6 +1,7 @@
 package org.fa7.biblio.producer.controller;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.fa7.biblio.commons.bean.Order;
 import org.fa7.biblio.producer.to.ResponseTO;
 import org.slf4j.Logger;
@@ -22,6 +23,6 @@ public class CallBackController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseTO purchaseOrderRequest(@RequestBody Order order) {
         SYSTEM_LOGGER.info("callbackUrl called - order[{}]", order);
-        return new ResponseTO(true, "Success");
+        return new ResponseTO(true, "Success", StringUtils.EMPTY);
     }
 }
