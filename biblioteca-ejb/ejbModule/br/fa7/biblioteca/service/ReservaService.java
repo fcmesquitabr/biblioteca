@@ -10,4 +10,12 @@ public class ReservaService extends BaseService<ReservaLivro>{
 	public ReservaService(){
 		super(ReservaLivro.class);
 	}
+
+	@Override
+	public ReservaLivro remove(ReservaLivro entity) {
+		entity = find(entity.getId());
+		return super.remove(entity);
+	}
+	
+	
 }
