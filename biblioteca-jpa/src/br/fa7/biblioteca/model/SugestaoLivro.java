@@ -30,7 +30,11 @@ public class SugestaoLivro implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "livroid")
 	private Livro livro;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "situacaosugestaoid")
+	private SituacaoSugestao situacaoSugestao;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataRealizacao;
 
@@ -100,5 +104,13 @@ public class SugestaoLivro implements Serializable{
 
 	public void setDataRealizacao(Date dataRealizacao) {
 		this.dataRealizacao = dataRealizacao;
-	}		
+	}
+
+	public SituacaoSugestao getSituacaoSugestao() {
+		return situacaoSugestao;
+	}
+
+	public void setSituacaoSugestao(SituacaoSugestao situacaoSugestao) {
+		this.situacaoSugestao = situacaoSugestao;
+	}				
 }

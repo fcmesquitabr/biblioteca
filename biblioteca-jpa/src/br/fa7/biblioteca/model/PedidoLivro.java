@@ -1,6 +1,7 @@
 package br.fa7.biblioteca.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class PedidoLivro implements Serializable{
@@ -27,17 +30,26 @@ public class PedidoLivro implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "pedidoid")
 	private Pedido pedido;
-	
-	private Integer quantidade;
 
+	@ManyToOne
+	@JoinColumn(name = "situacaopedidoid")
+	private SituacaoPedido situacaoPedido;
 	
+	private Integer quantidadeSolicitada;
+	
+	private Integer quantidadeConfirmada;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataRealizacao;
+
 	public PedidoLivro() {
 		super();
 	}
 	
 	@Override
 	public String toString() {
-		return "PedidoLivro [livro=" + livro + ", pedido=" + pedido + ", quantidade=" + quantidade + "]";
+		return "PedidoLivro [livro=" + livro + ", pedido=" + pedido + ", quantidadeSolicitada=" + quantidadeSolicitada
+				+ "]";
 	}
 
 
@@ -92,11 +104,36 @@ public class PedidoLivro implements Serializable{
 		this.pedido = pedido;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
+	public SituacaoPedido getSituacaoPedido() {
+		return situacaoPedido;
 	}
 
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}		
+	public void setSituacaoPedido(SituacaoPedido situacaoPedido) {
+		this.situacaoPedido = situacaoPedido;
+	}
+
+	public Integer getQuantidadeSolicitada() {
+		return quantidadeSolicitada;
+	}
+
+	public void setQuantidadeSolicitada(Integer quantidadeSolicitada) {
+		this.quantidadeSolicitada = quantidadeSolicitada;
+	}
+
+	public Integer getQuantidadeConfirmada() {
+		return quantidadeConfirmada;
+	}
+
+	public void setQuantidadeConfirmada(Integer quantidadeConfirmada) {
+		this.quantidadeConfirmada = quantidadeConfirmada;
+	}
+
+	public Date getDataRealizacao() {
+		return dataRealizacao;
+	}
+
+	public void setDataRealizacao(Date dataRealizacao) {
+		this.dataRealizacao = dataRealizacao;
+	}
+
 }

@@ -30,14 +30,19 @@ public class ReservaLivro implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "livroid")
 	private Livro livro;
+
+	@ManyToOne
+	@JoinColumn(name = "situacaoreservaid")
+	private SituacaoReserva situacaoReserva;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataRealizacao;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataEmprestimo;
 	
 	public ReservaLivro() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -102,5 +107,19 @@ public class ReservaLivro implements Serializable{
 		this.dataRealizacao = dataRealizacao;
 	}
 
-	
+	public SituacaoReserva getSituacaoReserva() {
+		return situacaoReserva;
+	}
+
+	public void setSituacaoReserva(SituacaoReserva situacaoReserva) {
+		this.situacaoReserva = situacaoReserva;
+	}
+
+	public Date getDataEmprestimo() {
+		return dataEmprestimo;
+	}
+
+	public void setDataEmprestimo(Date dataEmprestimo) {
+		this.dataEmprestimo = dataEmprestimo;
+	}	
 }
