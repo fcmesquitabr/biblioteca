@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import br.fa7.biblioteca.model.Distribuidora;
 import br.fa7.biblioteca.model.Pedido;
 import br.fa7.biblioteca.service.PedidoService;
 
@@ -25,6 +26,16 @@ public class PedidoRest {
 	public List<Pedido> listar() {
 		if(pedidoService !=null){			
 			return pedidoService.list();
+		}
+		return new ArrayList<>();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("distribuidora")
+	public List<Distribuidora> listarDistribuidoras() {
+		if(pedidoService !=null){			
+			return pedidoService.listarDistribuidoras();
 		}
 		return new ArrayList<>();
 	}

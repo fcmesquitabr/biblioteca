@@ -1,5 +1,7 @@
 package br.fa7.biblioteca.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.jms.Connection;
@@ -9,6 +11,7 @@ import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import br.fa7.biblioteca.model.Distribuidora;
 import br.fa7.biblioteca.model.Pedido;
 
 @Stateless
@@ -22,6 +25,11 @@ public class PedidoService extends BaseService<Pedido>{
 	
 	public PedidoService(){
 		super(Pedido.class);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Distribuidora> listarDistribuidoras(){
+		return em.createQuery("SELECT d FROM Distribuidora d").getResultList();
 	}
 	
 	public void enviarMensagemFila(){
