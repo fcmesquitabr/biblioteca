@@ -2,12 +2,14 @@ package br.fa7.biblioteca.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
+@Cacheable(true)
 @Entity
 public class Editora implements Serializable{
 
