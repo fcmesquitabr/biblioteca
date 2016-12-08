@@ -11,6 +11,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import br.fa7.biblioteca.model.SituacaoSugestao;
 import br.fa7.biblioteca.model.SugestaoLivro;
 import br.fa7.biblioteca.service.SugestaoService;
 
@@ -60,6 +62,8 @@ public class SugestaoRest {
 			
 			List<Integer> entitiesId = new ArrayList<>();
 			for (SugestaoLivro sugestaoLivro : body) {
+				sugestaoLivro.setSituacaoSugestao(new SituacaoSugestao());
+				sugestaoLivro.getSituacaoSugestao().setId(SituacaoSugestao.EM_ANALISE);
 				sugestaoLivro.setDataRealizacao(new Date());
 				SugestaoLivro sugestao = sugestaoService.insert(sugestaoLivro);
 				entitiesId.add(sugestao.getId());
@@ -86,6 +90,21 @@ public class SugestaoRest {
 			return Response.status(Status.OK).entity(sugestao).build();
 		} else {
 			throw new NotFoundException();
+		}
+	}
+
+	@PUT
+	@Path("/cancelamento/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response cancelar(@PathParam("id") Long id, SugestaoLivro sugestaoLivro) {
+		try {
+			sugestaoLivro.setSituacaoSugestao(new SituacaoSugestao());
+			sugestaoLivro.getSituacaoSugestao().setId(SituacaoSugestao.CANCELADA);
+			sugestaoLivro = sugestaoService.update(sugestaoLivro);
+			return Response.status(Status.OK).entity(sugestaoLivro).build();
+		} catch (Exception e) {
+			return tratarException(e);
 		}
 	}
 

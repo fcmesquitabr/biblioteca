@@ -1,3 +1,86 @@
 <div class="page-header">
-	<h2>{{pageHeader}}</h2>
+	<h2>Sugest&otilde;es</h2>
+</div>	
+<div>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+			<th>ID</th>
+			<th>Aluno</th>
+			<th>T&iacute;tulo do Livro</th>
+			<th>Editora</th>
+			<th>Data</th>
+			<th>A&ccedil;&otilde;es</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="sugestao in sugestoes">
+				<td>{{sugestao.id}}</td>
+				<td>{{sugestao.aluno.nome}}</td>
+				<td>{{sugestao.livro.titulo}}</td>
+				<td>{{sugestao.livro.editora.nome}}</td>
+				<td>{{sugestao.dataRealizacao | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+				<td>
+					<button class="btn btn-xs btn-default" 
+							ng-click="incluirNoPedido(sugestao.livro)">							
+								Incluir no Pedido
+					</button>
+					<button class="btn btn-xs btn-default" 
+							ng-click="cancelarSugestao(sugestao)">
+								Cancelar
+					</button>
+				</td>
+			</tr>		
+		</tbody>
+	</table>			
+
+	<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-primary"> 
+			<div class="panel-heading"> 
+				<h3 class="panel-title">Meu Pedido</h3> 
+			</div> 
+			<div class="panel-body">
+				<label for="distribuidoraSelect">Distribuidora: </label>
+				<select id="distribuidoraSelect" ng-model="pedido.distribuidora.id">
+					<option ng-repeat="distribuidora in distribuidoras" value="distribuidora.id">{{distribuidora.nome}}</option>
+				</select> <br />
+				<table class="table table-bordered table-striped" ng-show="pedidoLivros.length > 0">
+					<thead>
+						<tr>
+							<th>Livro</th>
+							<th>Quantidade</th>
+							<th> </th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="pedidoLivro in pedidoLivros">
+							<td>{{pedidoLivro.livro.titulo}}</td>
+							<td><input type="text" ng-model="pedidoLivro.quantidadeSolicitada"></td>
+							<td>
+								<button style="float: right;"
+									class="btn btn-xs btn-danger glyphicon glyphicon-trash"
+									ng-click="removerPedidoLivro(pedidoLivro)"></button>
+
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td>Total de Livro</td>
+							<td>{{totalLivrosPedido()}}</td>
+						</tr>
+					</tfoot>
+
+				</table>
+	
+				<h3 ng-show="pedidoLivros.length == 0">N&atilde;o h&aacute; livros inclu&iacute;dos no pedido</h3>
+			</div> 			
+			<div class="panel-footer">
+				<button class="btn btn-primary" ng-click="enviarPedido()" ng-disabled="isBotaoEnvioDesabilitado()">Enviar para Distribuidora</button>
+				<button class="btn btn-danger" ng-click="cancelarPedido()">Cancelar</button>
+			</div>	
+		</div>
+	</div>
+	</div>	
 </div>	
