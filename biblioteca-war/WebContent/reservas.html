@@ -1,3 +1,40 @@
 <div class="page-header">
 	<h2>{{pageHeader}}</h2>
 </div>	
+<div>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+			<th>ID</th>
+			<th>Aluno</th>
+			<th style="width: 300px;">T&iacute;tulo do Livro</th>
+			<th>ISBN</th>
+			<th>Situa&ccedil;&atilde;o</th>
+			<th>Data Reserva</th>
+			<th>Data Empr&eacute;stimo</th>
+			<th style="width: 115px;">A&ccedil;&otilde;es</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="reserva in reservas">
+				<td>{{reserva.id}}</td>
+				<td>{{reserva.aluno.nome}}</td>
+				<td>{{reserva.livro.titulo}}</td>
+				<td>{{reserva.livro.isbn}}</td>
+				<td>{{reserva.situacaoReserva.descricao}}</td>
+				<td>{{reserva.dataRealizacao | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+				<td>{{reserva.dataEmprestimo | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+				<td>
+					<button class="btn btn-xs btn-default" title="Confirmar Empréstimo"
+							ng-click="emprestarLivro(reserva)">							
+								Empr.
+					</button>
+					<button class="btn btn-xs btn-default" title="Cancelar a Reserva" 
+							ng-click="cancelarReserva(reserva)">
+								Canc.
+					</button>
+				</td>
+			</tr>		
+		</tbody>
+	</table>			
+</div>	
