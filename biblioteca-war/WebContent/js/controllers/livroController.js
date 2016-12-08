@@ -2,6 +2,9 @@ moduleBiblioteca
 	.controller('livroController', function($scope, $http) {
 		
 		$scope.aluno = {id:1};
+		$scope.livros = [];
+		$scope.reservas = [];
+		$scope.sugestoes = [];
 		
 		$http.get('api/livros').
 	        then(function(response) {

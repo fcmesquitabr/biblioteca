@@ -1,7 +1,7 @@
 <div class="page-header">
 	<h2>Cat&aacute;logo de Livros</h2>
 </div>	
-<div ng-controller="livroController">
+<div>
 	<table class="table table-bordered table-striped">
 		<thead>
 			<tr>
@@ -60,16 +60,16 @@
 					<thead>
 						<tr>
 							<th>Livro</th>
-							<th>Status</th>
+							<th>Situa&ccedil;&atilde;o</th>
 							<th> </th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="reserva in reservas">
 							<td>{{reserva.livro.titulo}}</td>
-							<td>{{reserva.id==null ? 'Pendente' : 'Confirmada'}}</td>
+							<td>{{reserva.id==null ? 'Não enviada' : reserva.situacaoReserva.descricao}}</td>
 							<td>
-								<button style="float: right;"
+								<button style="float: right;" title="Excluir Reserva" data-toggle="tooltip"
 									class="btn btn-xs btn-danger glyphicon glyphicon-trash"
 									ng-click="removerReserva(reserva)"></button>
 
@@ -96,16 +96,16 @@
 					<thead>
 						<tr>
 							<th>Livro</th>
-							<th>Status</th>
+							<th>Situa&ccedil;&atilde;o</th>
 							<th> </th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="sugestao in sugestoes">
 							<td>{{sugestao.livro.titulo}}</td>
-							<td>{{sugestao.id==null ? 'Pendente' : 'Confirmada'}}</td>
+							<td>{{sugestao.id==null ? 'Não enviada' : sugestao.situacaoSugestao.descricao}}</td>
 							<td>
-								<button style="float: right;"
+								<button style="float: right;" title="Excluir Sugestão" data-toggle="tooltip"
 									class="btn btn-xs btn-danger glyphicon glyphicon-trash"
 									ng-click="removerSugestao(sugestao)"></button>
 
@@ -122,5 +122,4 @@
 		</div>		
 	</div>
 	</div>
-	  
 </div>
