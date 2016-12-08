@@ -1,3 +1,15 @@
 /target/
 /.settings/
 .classpath
+
+*/target
+*.iml
+.idea
+
+*/logs
+
+biblio-distributor/biblio-distributor-commons/target/*
+biblio-distributor/biblio-distributor-consumer/logs/*
+biblio-distributor/biblio-distributor-consumer/target/*
+biblio-distributor/biblio-distributor-producer/logs/*
+biblio-distributor/biblio-distributor-producer/target/*

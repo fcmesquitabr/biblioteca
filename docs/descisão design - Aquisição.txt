@@ -1,0 +1,36 @@
+
+No projeto distribuidor, optamos por criar um produtor/consumidor. Com esse modelo podemos realizar o processamento dos pedidos de maneira assíncrono e suportando uma grande quantidade de requisições.
+
+A inicialização da solicitação acontece ao receber um JSON na api Rest da distribuidora.
+
+Exemplo de um JSON de solicitação de pedidos 
+{
+  "clientId": 12345,
+  "callBackUrl": "http://localhost:8080/biblio/ordercallback",
+  "clientOrderId": "123456",
+  "items": [
+    {
+      "isbn": 123,
+      "amount": 10
+    },
+    {
+      "isbn": 456,
+      "amount": 10
+    }
+  ]
+}
+
+Um Json é retornado com um número de pedido gerado na aplicação biblio-distributor.
+{
+  "success": true,
+  "message": "process order on queue",
+  "orderId": "5a999425-07fb-44fb-ba45-70fcb20a542a"
+}
+
+O biblio-distributor-producer irá colocar o pedido na Fila(distributor-inbox) do Active MQ que está configurada de maneira persistente, o biblio-distributor-consumer pegará o pedido e iniciará o seu processamento seguindo algumas regras:
+
+1 - Existe a validação se o número do pedido do cliente (clientOrderId) já foi processado;
+2 - Se existem itens no pedido;
+3 - Se existe estoque suficiente para atender a solicitação;
+
+No final do processamento, é chamada a url de callBack(callBackurl) que foi informada na api de solicitação do pedido, apresentando as quantidades atendidas e os itens processados em formato JSON. Cada pedido processado é retornado com o seu OrderId gerado no momento da solicitação pela api Rest.
