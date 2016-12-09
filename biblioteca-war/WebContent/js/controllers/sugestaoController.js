@@ -2,12 +2,9 @@ moduleBiblioteca
 	.controller('sugestaoController', function($scope, $http) {
 		
 		$scope.pageHeader="Sugest&otilde;es de Livros";
-		$scope.sugestoes = null;
-		$scope.distribuidoras = null;
-		$scope.pedido = {};
-		$scope.pedido.distribuidora = {};
-		$scope.pedidoLivros = [];
-
+		$scope.sugestoes = [];
+		$scope.distribuidoras = [];
+		
 		$http.get('api/sugestao').
 			then(function(response) {
 				$scope.sugestoes = response.data;
@@ -17,6 +14,15 @@ moduleBiblioteca
 			then(function(response) {
 				$scope.distribuidoras = response.data;
 			});				
+
+		$scope.novoPedido = function(){
+			$scope.pedido = {};
+			$scope.pedido.distribuidora = {};
+			$scope.pedido.distribuidora.id = $scope.distribuidoras[0];
+			$scope.pedidoLivros = [];			
+		}
+
+		$scope.novoPedido();
 
 		$scope.incluirNoPedido = function(livro){
 			var pedidoLivro = {};
@@ -29,11 +35,11 @@ moduleBiblioteca
 		$scope.cancelarSugestao = function(sugestao){
 			console.log("Cancelar sugestão");
 			$http.put('api/sugestao/cancelamento/' + sugestao.id, sugestao).
-			then(function(response){
-				sugestao.situacaoSugestao = response.data.situacaoReserva;	
-			}, function(response){
-				console.log("Erro ao cancelar reserva");
-			});
+				then(function(response){
+					sugestao.situacaoSugestao = response.data.situacaoReserva;	
+				}, function(response){
+					console.log("Erro ao cancelar sugestão");
+				});
 
 		}
 
@@ -48,6 +54,15 @@ moduleBiblioteca
 
 		$scope.enviarPedido = function(){
 			console.log("Enviar Pedido");
+			$scope.pedido.pedidoLivros = $scope.pedidoLivros;
+			$http.post('api/pedido/', $scope.pedido).
+				then(function(response){
+					$scope.pedido.situacaoPedido = response.data.situacaoPedido;
+					console.log("Pedido Realizacao");
+					$scope.novoPedido();
+				}, function(response){
+					console.log("Erro ao enviar Pedido");
+				});			
 		}
 		
 		$scope.cancelarPedido = function(pedido){

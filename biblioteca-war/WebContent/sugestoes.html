@@ -35,7 +35,7 @@
 	</table>			
 
 	<div class="row">
-	<div class="col-md-6">
+	<div class="col-md-8">
 		<div class="panel panel-primary"> 
 			<div class="panel-heading"> 
 				<h3 class="panel-title">Meu Pedido</h3> 
@@ -43,8 +43,14 @@
 			<div class="panel-body">
 				<label for="distribuidoraSelect">Distribuidora: </label>
 				<select id="distribuidoraSelect" ng-model="pedido.distribuidora.id">
-					<option ng-repeat="distribuidora in distribuidoras" value="distribuidora.id">{{distribuidora.nome}}</option>
+					<option ng-repeat="distribuidora in distribuidoras" value="{{distribuidora.id}}">{{distribuidora.nome}}</option>
 				</select> <br />
+
+				<label for="descricaoPedidoInput">Descri&ccedil;&atilde;o: </label>
+				<input id="descricaoPedidoInput" type="text" ng-model="pedido.descricao" 
+					placeholder="Descrição para o pedido" />
+				<br />
+				
 				<table class="table table-bordered table-striped" ng-show="pedidoLivros.length > 0">
 					<thead>
 						<tr>
