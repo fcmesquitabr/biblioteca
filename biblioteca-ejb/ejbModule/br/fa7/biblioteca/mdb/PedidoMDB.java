@@ -1,38 +1,44 @@
 package br.fa7.biblioteca.mdb;
 
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-@MessageDriven(name="minhaFilaMDB", mappedName="minhaFilaMDB",
+import br.fa7.biblioteca.model.Pedido;
+import br.fa7.biblioteca.service.PedidoService;
+
+@MessageDriven(name="pedidosMDB", mappedName="pedidosMDB",
 	activationConfig={
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"), 
-		@ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/MinhaFila"),
+		@ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/Pedidos"),
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")})
 public class PedidoMDB implements MessageListener{
 
+	@EJB
+	PedidoService pedidoService;
+	
 	@Override
-	public void onMessage(Message rcvMessage) {
-		TextMessage msg = null;
+	public void onMessage(Message message) {
+		TextMessage textMessage = null;
 		try {
-			if (rcvMessage instanceof TextMessage) {
-				msg = (TextMessage) rcvMessage;
-				System.out.println("Received Message from queue: " + msg.getText());
+			if (message instanceof TextMessage) {
+				textMessage = (TextMessage) message;
+				enviarPedidoParaDistribuidora(Integer.parseInt(textMessage.getText()));
 			} else {
-				System.out.println("Message of wrong type: " + rcvMessage.getClass().getName());
+				System.out.println("Mensagem inválida na fila");
 			}
 		} catch (JMSException e) {
 			throw new RuntimeException(e);
 		}	
-		try {
-			Thread.sleep(30000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	}
+
+	private void enviarPedidoParaDistribuidora(Integer parseInt) {
+		Pedido pedido = pedidoService.find(parseInt);
+		
 	}
 	
 }

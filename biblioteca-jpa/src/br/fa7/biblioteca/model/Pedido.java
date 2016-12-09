@@ -2,13 +2,17 @@ package br.fa7.biblioteca.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,11 +32,18 @@ public class Pedido implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "distribuidoraid")
 	private Distribuidora distribuidora;
+
+	@ManyToOne
+	@JoinColumn(name = "situacaopedidoid")
+	private SituacaoPedido situacaoPedido;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataRealizacao;
 
-		
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+			mappedBy="pedido",fetch=FetchType.LAZY)
+	private List<PedidoLivro> pedidoLivros;
+	
 	public Pedido() {
 		super();
 	}
@@ -100,6 +111,20 @@ public class Pedido implements Serializable{
 	public void setDataRealizacao(Date dataRealizacao) {
 		this.dataRealizacao = dataRealizacao;
 	}
-	
-	
+
+	public SituacaoPedido getSituacaoPedido() {
+		return situacaoPedido;
+	}
+
+	public void setSituacaoPedido(SituacaoPedido situacaoPedido) {
+		this.situacaoPedido = situacaoPedido;
+	}
+
+	public List<PedidoLivro> getPedidoLivros() {
+		return pedidoLivros;
+	}
+
+	public void setPedidoLivros(List<PedidoLivro> pedidoLivros) {
+		this.pedidoLivros = pedidoLivros;
+	}		
 }

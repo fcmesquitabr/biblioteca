@@ -1,3 +1,52 @@
 <div class="page-header">
 	<h2>{{pageHeader}}</h2>
 </div>	
+
+<div>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+			<th>ID</th>
+			<th>Descri&ccedil;&atilde;o</th>
+			<th>Distribuidora</th>
+			<th>Situa&ccedil;&atilde;o</th>
+			<th>Data de Realiza&ccedil;&atilde;o</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="pedido in pedidos" ng-click="exibirLivros(pedido)" 
+					style="cursor: pointer;" title="Clique para detalhar os livros desse pedido">
+				<td>{{pedido.id}}</td>
+				<td>{{pedido.descricao}}</td>
+				<td>{{pedido.distribuidora.nome}}</td>
+				<td>{{pedido.situacao.descricao}}</td>
+				<td>{{pedido.dataRealizacao | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+			</tr>		
+		</tbody>
+	</table>
+	
+	<br /><br />
+	
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th colspan="4">Livros Solicitados no Pedido</th>
+			</tr>
+			<tr>
+			<th>Título</th>
+			<th>ISBN</th>
+			<th>Quantidade Solicitada</th>
+			<th>Quantidade Confirmada</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="livroPedido in livroPedidos">
+				<td>{{livroPedido.livro.titulo}}</td>
+				<td>{{livroPedido.livro.isbn}}</td>
+				<td>{{livroPedido.quantidadeSolicitada}}</td>
+				<td>{{livroPedido.quantidadeConfirmada}}</td>
+			</tr>		
+		</tbody>
+	</table>			
+				
+</div>
