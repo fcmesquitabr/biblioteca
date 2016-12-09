@@ -6,7 +6,9 @@
 - ActiveMQ
 - Postgres
 
-Executar as classes main como java program 
+Para iniciar as duas aplicações é necessário seguir os passos abaixo:
+* Importar o projeto biblio-distributor como Maven Project no Eclipe
+* Executar como Java Application as duas classes main abaixo (clicar com segundo botão na classe, Run As -> Java Application)
 - org.fa7.biblio.producer.bin.Producer
 - org.fa7.biblio.consumer.bin.Consumer
 
