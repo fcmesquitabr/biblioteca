@@ -84,7 +84,7 @@ public class PedidoRest {
 					pedidoLivro.setPedido(body);
 				}
 			}
-			pedidoService.insert(body);
+			pedidoService.processar(body);
 			String url = "/api/pedido/";
 			return Response.status(Status.CREATED).header("Location", url).entity(body.getId()).build();				
 

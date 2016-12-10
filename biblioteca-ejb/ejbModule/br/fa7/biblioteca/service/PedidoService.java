@@ -35,6 +35,11 @@ public class PedidoService extends BaseService<Pedido>{
 		return em.createQuery("SELECT d FROM Distribuidora d ORDER BY d.nome").getResultList();
 	}
 
+	public void processar(Pedido pedido){
+		pedido = insert(pedido);
+		enviarParaFila(pedido);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<PedidoLivro> listarPedidoLivro(Pedido pedido){
 		if(pedido ==null || pedido.getId()==null){
@@ -49,7 +54,7 @@ public class PedidoService extends BaseService<Pedido>{
 		return qry.getResultList();
 	}
 
-	public void enviarPedidoParaFila(Pedido pedido){
+	private void enviarParaFila(Pedido pedido){
 		Connection connection = null;
 		Session session = null;
 		MessageProducer publisher = null; 
@@ -65,21 +70,25 @@ public class PedidoService extends BaseService<Pedido>{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (publisher != null)
-				try {
-					publisher.close();
-				} catch (Exception ignore) {
-				}
-			if (session != null)
-				try {
-					session.close();
-				} catch (Exception ignore) {
-				}
-			if (connection != null)
-				try {
-					connection.close();
-				} catch (Exception ignore) {
-				}
+			fecharRecursos(connection, session, publisher);
 		}
+	}
+
+	private void fecharRecursos(Connection connection, Session session, MessageProducer publisher) {
+		if (publisher != null)
+			try {
+				publisher.close();
+			} catch (Exception ignore) {
+			}
+		if (session != null)
+			try {
+				session.close();
+			} catch (Exception ignore) {
+			}
+		if (connection != null)
+			try {
+				connection.close();
+			} catch (Exception ignore) {
+			}
 	}
 }
