@@ -19,7 +19,5 @@ public class LivroService extends BaseService<Livro>{
 	public List<Livro> list() {		
 		Query qry = em.createQuery("SELECT l FROM Livro l LEFT JOIN FETCH l.editora"); 
 		return qry.getResultList();
-	}
-	
-	
+	}		
 }

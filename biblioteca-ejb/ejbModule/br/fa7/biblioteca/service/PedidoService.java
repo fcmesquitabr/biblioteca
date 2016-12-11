@@ -13,9 +13,12 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.persistence.Query;
 
+import br.fa7.biblioteca.distribuidora.DistribuidoraOrder;
+import br.fa7.biblioteca.distribuidora.DistribuidoraOrderItem;
 import br.fa7.biblioteca.model.Distribuidora;
 import br.fa7.biblioteca.model.Pedido;
 import br.fa7.biblioteca.model.PedidoLivro;
+import br.fa7.biblioteca.model.SituacaoPedido;
 
 @Stateless
 public class PedidoService extends BaseService<Pedido>{
@@ -37,6 +40,7 @@ public class PedidoService extends BaseService<Pedido>{
 
 	public void processar(Pedido pedido){
 		pedido = insert(pedido);
+		em.flush();
 		enviarParaFila(pedido);
 	}
 	
@@ -90,5 +94,33 @@ public class PedidoService extends BaseService<Pedido>{
 				connection.close();
 			} catch (Exception ignore) {
 			}
+	}
+
+	public void processarRetornoDistribuidora(DistribuidoraOrder order) {
+		Pedido pedido = find(Integer.parseInt(order.getClientOrderId()));
+		processarDistribuidoraItens(pedido, order.getItems());
+		pedido.setSituacaoPedido(new SituacaoPedido());
+		pedido.getSituacaoPedido().setId(SituacaoPedido.PROCESSADO_PELA_DISTRIBUIDORA);
+		update(pedido);
+	}
+
+	private void processarDistribuidoraItens(Pedido pedido, List<DistribuidoraOrderItem> items) {
+		for (DistribuidoraOrderItem distribuidoraOrderItem : items) {
+			processarDistribuidoraItem(pedido, distribuidoraOrderItem);
+		}
+		
+	}
+
+	private void processarDistribuidoraItem(Pedido pedido, DistribuidoraOrderItem distribuidoraOrderItem) {
+		PedidoLivro pedidoLivro = buscarPedidoLivro(pedido, distribuidoraOrderItem.getIsbn().toString());
+		pedidoLivro.setQuantidadeConfirmada(distribuidoraOrderItem.getAmountResponse());
+		em.merge(pedidoLivro);
+	}
+	
+	private PedidoLivro buscarPedidoLivro(Pedido pedido, String isbn){
+		Query qry = em.createQuery("SELECT pl FROM PedidoLivro pl WHERE pl.pedido=:pedido AND pl.livro.isbn=:isbn");
+		qry.setParameter("pedido", pedido);
+		qry.setParameter("isbn", isbn);
+		return (PedidoLivro) qry.getSingleResult();
 	}
 }

@@ -42,9 +42,17 @@
     </div>
 </nav>
 
-<div class="container">
-	<div ng-view></div>
-</div>
+	<div class="container">
+		<div id="panelMensagemSucesso" class="alert alert-success alert-dismissable fade in">
+		  <button class="close" aria-label="close" ng-click="fecharMensagemSucesso()">&times;</button>
+		  {{mensagemSucesso}}
+		</div>
+		<div id="panelMensagemErro" class="alert alert-info alert-dismissable fade in">
+		  <button class="close" aria-label="close" ng-click="fecharMensagemErro()">&times;</button>
+		  {{mensagemErro}}
+		</div>	
+		<div ng-view></div>
+	</div>
 	<script type="text/javascript" >
 		$(document).ready(function(){
 		    $('[data-toggle="tooltip"]').tooltip();   

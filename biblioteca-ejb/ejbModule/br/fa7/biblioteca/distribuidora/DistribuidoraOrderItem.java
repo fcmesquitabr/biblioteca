@@ -4,10 +4,35 @@ import br.fa7.biblioteca.model.PedidoLivro;
 
 public class DistribuidoraOrderItem {
 
+	private Integer id;
+	
 	private Long isbn;
 	
 	private Integer amount;
 	
+	private Integer amountRequest;
+	
+	private Integer amountResponse;
+	
+	@Override
+	public String toString() {
+		return "DistribuidoraOrderItem [isbn=" + isbn + ", amount=" + amount + "]";
+	}
+	
+	
+	public DistribuidoraOrderItem() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public DistribuidoraOrderItem(Long isbn, Integer amount) {
+		super();
+		this.isbn = isbn;
+		this.amount = amount;
+	}
+
+
 	public DistribuidoraOrderItem(PedidoLivro pedidoLivro) {
 		super();
 		this.isbn = Long.parseLong(pedidoLivro.getLivro().getIsbn());
@@ -29,6 +54,35 @@ public class DistribuidoraOrderItem {
 	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
-	
+
+
+	public Integer getId() {
+		return id;
+	}
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
+	public Integer getAmountRequest() {
+		return amountRequest;
+	}
+
+
+	public void setAmountRequest(Integer amountRequest) {
+		this.amountRequest = amountRequest;
+	}
+
+
+	public Integer getAmountResponse() {
+		return amountResponse;
+	}
+
+
+	public void setAmountResponse(Integer amountResponse) {
+		this.amountResponse = amountResponse;
+	}		
 	
 }

@@ -21,7 +21,6 @@ public class SugestaoService extends BaseService<SugestaoLivro>{
 				"SELECT s "
 				+ "FROM SugestaoLivro s "
 				+ "	LEFT JOIN FETCH s.livro l"
-//				+ "	LEFT JOIN FETCH l.editora "
 				+ "	LEFT JOIN FETCH s.aluno "); 
 		return qry.getResultList();
 	}
@@ -30,7 +29,5 @@ public class SugestaoService extends BaseService<SugestaoLivro>{
 	public SugestaoLivro remove(SugestaoLivro entity) {
 		entity = find(entity.getId());
 		return super.remove(entity);
-	}
-	
-	
+	}		
 }

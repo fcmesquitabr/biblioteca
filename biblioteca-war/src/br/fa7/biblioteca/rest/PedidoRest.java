@@ -32,29 +32,30 @@ public class PedidoRest {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pedido> listar() {
-		if(pedidoService !=null){
+		if(pedidoService == null) return new ArrayList<>();
+		try{
 			List<Pedido> listaPedidos = pedidoService.list();
 			for(Pedido pedido: listaPedidos){
 				pedido.setPedidoLivros(null);
 			}
-			return listaPedidos;
+			return listaPedidos;						
+		} catch (Exception e){
+			tratarException(e);
+			return new ArrayList<>();
 		}
-		return new ArrayList<>();
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/livros")
 	public List<PedidoLivro> listarPedidoLivros(@PathParam("id") Integer id) {
-		if(pedidoService !=null){
-			Pedido pedido = pedidoService.find(id);
-			List<PedidoLivro> listaPedidoLivro = pedidoService.listarPedidoLivro(pedido);
-			for (PedidoLivro pedidoLivro : listaPedidoLivro) {
-				pedidoLivro.getPedido().setPedidoLivros(null);
-			}
-			return listaPedidoLivro;
+		if(pedidoService ==null) return new ArrayList<>();
+		Pedido pedido = pedidoService.find(id);
+		List<PedidoLivro> listaPedidoLivro = pedidoService.listarPedidoLivro(pedido);
+		for (PedidoLivro pedidoLivro : listaPedidoLivro) {
+			pedidoLivro.getPedido().setPedidoLivros(null);
 		}
-		return new ArrayList<>();
+		return listaPedidoLivro;
 	}
 
 	@GET
@@ -94,6 +95,7 @@ public class PedidoRest {
 	}
 
 	private Response tratarException(Exception e) {
+		e.printStackTrace();
 		return Response.status(Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
 	}
 

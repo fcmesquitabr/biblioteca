@@ -1,6 +1,7 @@
 var moduleBiblioteca = angular.module("biblioteca", ["ngRoute"]);
 moduleBiblioteca.config(function($routeProvider) {
-    $routeProvider
+	  
+	$routeProvider
     .when("/", {
         templateUrl : "livros.html",
         controller : "livroController"        	

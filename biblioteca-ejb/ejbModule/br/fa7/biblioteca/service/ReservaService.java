@@ -13,7 +13,6 @@ public class ReservaService extends BaseService<ReservaLivro>{
 	public ReservaService(){
 		super(ReservaLivro.class);
 	}
-
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -22,7 +21,6 @@ public class ReservaService extends BaseService<ReservaLivro>{
 				"SELECT r "
 				+ "FROM ReservaLivro r "
 				+ "	LEFT JOIN FETCH r.livro l"
-//				+ "	LEFT JOIN FETCH l.editora "
 				+ "	LEFT JOIN FETCH r.aluno "); 
 		return qry.getResultList();
 	}

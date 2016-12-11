@@ -1,5 +1,13 @@
 moduleBiblioteca
-	.controller('livroController', function($scope, $http) {
+	.controller('livroController', function($scope, $rootScope, $http) {
+		
+		$rootScope.exibeMensagemSucesso = false;
+		$rootScope.exibeMensagemErro = false;
+		$rootScope.mensagemSucesso = "Mensagem de Sucesso";
+		$rootScope.mensagemErro = "Mensagem de Erro";
+		
+		jQuery('#panelMensagemSucesso').hide();
+		jQuery('#panelMensagemErro').hide();
 		
 		$scope.aluno = {id:1};
 		$scope.livros = [];
@@ -147,12 +155,25 @@ moduleBiblioteca
             }
 		}
 		
+		$rootScope.fecharMensagemSucesso = function(){
+			jQuery('#panelMensagemSucesso').hide();
+		}
+
+		$rootScope.fecharMensagemErro = function(){
+			jQuery('#panelMensagemErro').hide();
+		}
+
 		$scope.cancelarReservas = function(){
 			var copiaReservas = $scope.reservas.slice();
             for(var i=0; i< copiaReservas.length; i++) {
             	var reserva = copiaReservas[i]; 
             	$scope.removerReserva(reserva);
             }
+            $rootScope.mensagemSucesso = "Reservas Canceladas!";
+            jQuery('#panelMensagemSucesso').show();
 		}
-
+		
+		jQuery(document).ready(function(){
+		    $('[data-toggle="tooltip"]').tooltip();   
+		});
 	});
