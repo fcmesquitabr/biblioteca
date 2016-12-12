@@ -1,0 +1,35 @@
+Decisões de Design no Processo de Reserva.
+
+O processo de reserva de Livros pode ser resumido da seguinte forma:
+
+1. O aluno consulta os livros existentes no sistema (livros que podem estar disponíveis ou não).
+
+2. Na listagem de livros apresentada, o aluno deve clicar no botão "Reservar" para efetuar a reserva.
+
+3. O aluno pode excluir reservas ainda não confirmadas (cujo o livro não foi emprestado).
+
+4. O bibliotecário acessa à tela de reservas realizadas e pode emprestar o livro ou cancelar a reserva 
+após alguns dias caso o aluno não venha retirá-lo.
+
+
+Para realizar esse processo as seguintes decisões foram tomadas:
+
+1. As páginas da listagem de livros e de reservas interagem com o servidor através de uma API REST numa single page application, 
+onde os dados necessários são armazenados no cliente evitando utilizar dados em sessão, tirando sobrecarga do servidor.
+
+2. A classe LivroRest é responsável pela listagem de livros através API REST e possui escopo de Request.
+
+3. A classe ReservaRest é responsável por todas as operações(inserção, remoção, empréstimo e cancelamento) 
+relativas à reserva através de um API REST e possui escopo de request.
+
+4. A classe LivroRest interage com a classe da camada de negócio LivroService que é um EJB Stateless, 
+pois não há necessidade de armazenar dados dos clientes da aplicação entre requisições (esse dados são armazenados no cliente).
+
+5. A classe ReservaRest interage com a classe da camada de negócio ReservaService que é um EJB Stateless,
+pois não há necessidade de armazenar dados dos clientes da aplicação (esse dados são armazenados no cliente).
+
+6. Os EJBs LivroService e ReservaService também são responsáveis pelo acesso à base de dados através do EntityManager do JPA. 
+Consideramos que como não há nenhuma complexidade no acesso à base, não haveria a necessidade de existir uma camada separada apenas
+para ser responsável pelo acesso à base. Preferimos, assim, previlegiar à simplicidade com um número menor de camadas.
+
+7. As tabelas de base de dados estão mapeadas utilizando entidades JPA para facilitar o mapeamento Tabelas <-> Objetos.

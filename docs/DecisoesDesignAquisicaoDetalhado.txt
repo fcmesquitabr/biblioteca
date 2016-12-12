@@ -1,0 +1,63 @@
+Decisões de Design do Processo de Aquisição de Livros
+
+O processo de aquisição de livros acontece da seguinte forma:
+
+1. Os alunos consultam os livros existentes no sistema (livros que podem estar disponíveis ou não).
+
+2. Na listagem de livros apresentada, o aluno pode clicar no botão "Sugerir" para efetuar 
+a sugestão de aquisição para os livros não existentes na biblioteca.
+
+3. Os administradores do sistema acessam à página de Sugestões para avaliar às sugestões apresentadas pelos
+alunos. Caso alguma sugestão seja avaliada como adequada, deve-se clicar no botão "Incluir no Pedido". Caso o livro 
+não seja de interesse pode-se clicar no botão "Cancelar".
+
+4. Após selecionar todos os livros de interesse, os Administradores devem escolher para qual distribuidora será enviado
+o pedido e a quantidade de cada um dos livros.
+
+5. Após essas definições deve-se clicar no botão "Enviar para Distribuidora"
+
+6. Os administradores podem acompanhar a situação dos pedidos realizados através da página de Pedidos.
+
+
+Para realizar esse processo as seguintes decisões foram tomadas:
+
+1. A página de listagem de sugestões dos alunos interagem com o servidor através de uma API REST numa "single page application", 
+onde a maior parte dos dados necessários são armazenados no cliente evitando utilizar dados em sessão, tirando sobrecarga do servidor.
+
+2. A "montagem" do pedido é feito somente no navegador utilizando o framewaork JavaScript AngularJS. Somente após clicar no botão
+"Enviar para a distribuidora" é que os dados são enviados para o servidor.
+
+3. A classe PedidoRest é responsável por receber os dados do Pedido.
+
+4. A classe PedidoRest interage com a classe da camada de negócio PedidoService que é um EJB Stateless, 
+pois não há necessidade de armazenar dados dos clientes da aplicação entre requisições (esse dados são armazenados no cliente).
+
+5. A classe PedidoRest salva o Pedido na base de dados e enviar para uma Fila JMS o ID do pedido a ser enviado para Distribuidora posteriormente.
+Isso foi implementado desta forma porque o envio de imediato para a Distribuidora pode ter um processamento demorado, 
+deixando essas requisições dos usuários lentas. Assim, optou-se por um processamento do pedido de forma ASSÍNCRONA.
+
+6. A classe PedidoMDB é o consumidor da fila de pedidos, e é responsável por enviar o Pedido para o sistema da distribuidora.
+
+7. A solução de fila escolhida foi o serviço de filas JMS Artemis(baseado no ActiveMQ) que vem embarcado junto com o servidor de
+aplicações WildFly. A escolha foi motivada pelo baixo número de pedidos durante um dia, o que não justificaria utilizar um servidor de filas
+separado para poucos pedidos.
+
+8. Após o processamento do pedido pela distribuidora é feita uma requisição para uma função de "callback" 
+usando API REST na classe DistribuidorCallbackRest.
+
+9. A classe DistribuidorCallbackRest repassa o pedido para classe de negócio PedidoService que também é responsável por concluir
+o fluxo de aquisição (atualizando as informações dos pedidos com as quantidades confirmadas dos livros).
+
+
+Na implementação do distribuidor tomamos as seguintes decisões.
+
+1. O pedido é feito utilizando uma API REST. No JSON enviado na requisição é solicitado que a biblioteca informe uma URL de 
+"callback" a ser utilizada para enviar a situação do pedido.
+
+2. Como o processmento do pedido pode ser demorado, optou-se também utilizar processamento assíncrono com a utlização de
+filas JMS em um servidor AciveMQ, evitando que muitas requisições fiquem aguardando a resposta, gerando sobrecarga 
+no servidir. Preferiu-se usar aqui um servidor separado de filas porque a distribuidora pode receber muitos pedidos durante 
+o dia de diversas bibliotecas e livrarias.
+
+3. Após o processamento do pedido, a distribuidora utiliza a URL de callback informada pela biblioteca para enviar a situação de
+cada um dos livros do pedido.
