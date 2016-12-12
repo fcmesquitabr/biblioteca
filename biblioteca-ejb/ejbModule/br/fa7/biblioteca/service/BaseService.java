@@ -33,13 +33,13 @@ public class BaseService<T> {
 		        .getResultList();
 	}
 
-    public T insert(T entity) {
+	public T insert(T entity) {
     	if(entity == null) return null;
     	em.persist(entity);
     	return entity;
     }
 
-    public T update(T entity) {
+	public T update(T entity) {
     	if(entity == null) return null;
         return em.merge(entity);
     }

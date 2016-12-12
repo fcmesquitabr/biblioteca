@@ -1,18 +1,28 @@
 moduleBiblioteca
-	.controller('sugestaoController', function($scope, $http) {
+	.controller('sugestaoController', function($scope, $rootScope, $http) {
 		
 		$scope.pageHeader="Sugest&otilde;es de Livros";
 		$scope.sugestoes = [];
 		$scope.distribuidoras = [];
 		
+		jQuery('#panelMensagemSucesso').hide();
+		jQuery('#panelMensagemErro').hide();
+
+		
 		$http.get('api/sugestao').
 			then(function(response) {
 				$scope.sugestoes = response.data;
+			}, function(response) {
+	            $rootScope.mensagemErro = "Erro ao consultar as sugestões de livros!";
+	            jQuery('#panelMensagemErro').show();
 			});				
 
 		$http.get('api/pedido/distribuidora').
 			then(function(response) {
 				$scope.distribuidoras = response.data;
+			}, function(response) {
+	            $rootScope.mensagemErro = "Erro ao consultar as distribuidoras!";
+	            jQuery('#panelMensagemErro').show();
 			});				
 
 		$scope.novoPedido = function(){
@@ -29,50 +39,48 @@ moduleBiblioteca
 			pedidoLivro.livro = livro;
 			pedidoLivro.quantidadeSolicitada=0;
 			$scope.pedidoLivros.push(pedidoLivro);
-			console.log("Incluiu no Pedido");
 		}
 			
 		$scope.cancelarSugestao = function(sugestao){
-			console.log("Cancelar sugestão");
 			$http.put('api/sugestao/cancelamento/' + sugestao.id, sugestao).
 				then(function(response){
-					sugestao.situacaoSugestao = response.data.situacaoReserva;	
+					sugestao.situacaoSugestao = response.data.situacaoSugestao;
+		            $rootScope.mensagemSucesso = "Sugest&atilde;o cancelada com sucesso!";
+		            jQuery('#panelMensagemSucesso').show();	
 				}, function(response){
-					console.log("Erro ao cancelar sugestão");
+					$rootScope.mensagemErro = "Erro ao cancelar a sugest&atilde;o!";
+		            jQuery('#panelMensagemErro').show();
 				});
 
 		}
 
 		$scope.removerPedidoLivro = function(pedidoLivro){
-			console.log("Remover pedido do Livro");
 			var index = $scope.pedidoLivros.indexOf(pedidoLivro);
 			if(index >= 0){
 				$scope.pedidoLivros.splice(index,1);				
 			}
-
 		}
 
 		$scope.enviarPedido = function(){
-			console.log("Enviar Pedido");
 			$scope.pedido.pedidoLivros = $scope.pedidoLivros;
 			$http.post('api/pedido/', $scope.pedido).
 				then(function(response){
 					$scope.pedido.situacaoPedido = response.data.situacaoPedido;
-					console.log("Pedido Realizacao");
 					$scope.novoPedido();
+		            $rootScope.mensagemSucesso = "Pedido enviado!";
+		            jQuery('#panelMensagemSucesso').show();						
 				}, function(response){
-					console.log("Erro ao enviar Pedido");
+					$rootScope.mensagemErro = "Erro ao enviar Pedido!";
+		            jQuery('#panelMensagemErro').show();
 				});			
 		}
 		
 		$scope.cancelarPedido = function(pedido){
-			console.log("Cancelar Pedido");
 			var copiaPedidoLivros = $scope.pedidoLivros.slice();
             for(var i=0; i< copiaPedidoLivros.length; i++) {
             	var pedidoLivro = copiaPedidoLivros[i]; 
             	$scope.removerPedidoLivro(pedidoLivro);
             }
-
 		}
 
 		$scope.isBotaoEnvioDesabilitado = function(){

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html ng-app="biblioteca">
+<html ng-app="biblioteca" lang="pt-br">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-<title>Página Inicial - Biblioteca</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>PÃ¡gina Inicial - Biblioteca</title>
 
 <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
@@ -36,7 +37,7 @@
           <li><a href="#livros">Livros</a></li>
           <li><a href="#pedidos">Pedidos</a></li>
           <li><a href="#reservas">Reservas</a></li>
-          <li><a href="#sugestoes">Sugestões</a></li>
+          <li><a href="#sugestoes">SugestÃµes</a></li>
         </ul>
       </div>
     </div>
@@ -45,9 +46,9 @@
 	<div class="container">
 		<div id="panelMensagemSucesso" class="alert alert-success alert-dismissable fade in">
 		  <button class="close" aria-label="close" ng-click="fecharMensagemSucesso()">&times;</button>
-		  {{mensagemSucesso}}
+		  <span>{{mensagemSucesso}}</span>
 		</div>
-		<div id="panelMensagemErro" class="alert alert-info alert-dismissable fade in">
+		<div id="panelMensagemErro" class="alert alert-danger alert-dismissable fade in">
 		  <button class="close" aria-label="close" ng-click="fecharMensagemErro()">&times;</button>
 		  {{mensagemErro}}
 		</div>	

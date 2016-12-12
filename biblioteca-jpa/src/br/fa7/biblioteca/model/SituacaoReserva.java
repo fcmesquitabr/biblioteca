@@ -21,6 +21,8 @@ public class SituacaoReserva implements Serializable{
 	
 	public static final int CANCELADO = 3;
 	
+	public static final int DEVOLVIDO = 4;
+	
 	@Id
 	@SequenceGenerator(name="situacaoreserva_id_seq", sequenceName="situacaoreserva_id_seq", allocationSize=1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="situacaoreserva_id_seq")

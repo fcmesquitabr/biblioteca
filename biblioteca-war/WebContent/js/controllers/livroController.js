@@ -1,10 +1,8 @@
 moduleBiblioteca
 	.controller('livroController', function($scope, $rootScope, $http) {
 		
-		$rootScope.exibeMensagemSucesso = false;
-		$rootScope.exibeMensagemErro = false;
-		$rootScope.mensagemSucesso = "Mensagem de Sucesso";
-		$rootScope.mensagemErro = "Mensagem de Erro";
+		$rootScope.mensagemSucesso = "";
+		$rootScope.mensagemErro = "";
 		
 		jQuery('#panelMensagemSucesso').hide();
 		jQuery('#panelMensagemErro').hide();
@@ -17,16 +15,25 @@ moduleBiblioteca
 		$http.get('api/livros').
 	        then(function(response) {
 	            $scope.livros = response.data;
+	        },function(response) {
+	            $rootScope.mensagemErro = "Erro ao consultar livros!";
+	            jQuery('#panelMensagemErro').show();			            
 	        });
 
 		$http.get('api/reservas').
 	        then(function(response) {
 	            $scope.reservas = response.data;
+	        },function(response) {
+	            $rootScope.mensagemErro = "Erro ao consultar reservas!";
+	            jQuery('#panelMensagemErro').show();			            
 	        });
 
 		$http.get('api/sugestao').
 	        then(function(response) {
 	            $scope.sugestoes = response.data;
+	        },function(response) {
+	            $rootScope.mensagemErro = "Erro ao consultar sugestões!";
+	            jQuery('#panelMensagemErro').show();			            
 	        });
 
 		$scope.isReservado = function(livro){
@@ -56,9 +63,12 @@ moduleBiblioteca
 					$http.get('api/reservas').
 				        then(function(response) {
 				            $scope.reservas = response.data;
+				            $rootScope.mensagemSucesso = "Reservas enviadas!";
+				            jQuery('#panelMensagemSucesso').show();			            
 				        });					
 				}, function(response) {
-					console.log("Erro");
+		            $rootScope.mensagemErro = "Erro ao enviar reservas!";
+		            jQuery('#panelMensagemErro').show();			            
 				});
 		}
 		
@@ -76,14 +86,16 @@ moduleBiblioteca
 		$scope.enviarSugestoes = function(){
 			$http.post('api/sugestao',$scope.getSugestoesPendentes()).
 				then(function(response) {
-					console.log("Sucesso");
 					$http.get('api/sugestao').
 			        then(function(response) {
 			            $scope.sugestoes = response.data;
+			            $rootScope.mensagemSucesso = "Sugestões enviadas!";
+			            jQuery('#panelMensagemSucesso').show();			            
 			        });					
-				}, function(response) {
-					console.log("Erro");
-				});
+					}, function(response) {
+			            $rootScope.mensagemErro = "Erro ao enviar sugestões!";
+			            jQuery('#panelMensagemErro').show();			            
+					});
 		}
 
 		$scope.getSugestoesPendentes = function(){
@@ -117,13 +129,21 @@ moduleBiblioteca
 			}
 		} 
 
+		$scope.isPodeRemoverReserva = function(reserva){
+			return (reserva.situacaoReserva == null || reserva.situacaoReserva.id == null 
+					|| reserva.situacaoReserva.id == 1 || reserva.situacaoReserva.id == 3)
+		}
+
 		$scope.removerReserva = function(reserva){
+			if(!$scope.isPodeRemoverReserva(reserva)) return;
 			if(reserva.id!=null){
 				$http.delete('api/reservas/' + reserva.id).
 					then(function(response) {
-						console.log("Sucesso");
+			            $rootScope.mensagemSucesso = "Reserva excluída!";
+			            jQuery('#panelMensagemSucesso').show();	
 					}, function(response) {
-						console.log("Erro");
+			            $rootScope.mensagemSucesso = "Erro ao excluir reserva!";
+			            jQuery('#panelMensagemErro').show();	
 					});				
 			}
 			var index = $scope.reservas.indexOf(reserva);
@@ -131,14 +151,22 @@ moduleBiblioteca
 				$scope.reservas.splice(index,1);				
 			}
 		}
+	
+		$scope.isPodeRemoverSugestao = function(sugestao){
+			return (sugestao.situacaoSugestao == null || sugestao.situacaoSugestao.id == null 
+					|| sugestao.situacaoSugestao.id == 1 || sugestao.situacaoSugestao.id == 3)
+		}
 
 		$scope.removerSugestao = function(sugestao){
+			if(!$scope.isPodeRemoverSugestao(sugestao)) return;
 			if(sugestao.id!=null){
 				$http.delete('api/sugestao/' + sugestao.id).
 					then(function(response) {
-						console.log("Sucesso");
+			            $rootScope.mensagemSucesso = "Sugestão excluída!";
+			            jQuery('#panelMensagemSucesso').show();	
 					}, function(response) {
-						console.log("Erro");
+			            $rootScope.mensagemSucesso = "Erro ao excluir sugestão!";
+			            jQuery('#panelMensagemErro').show();	
 					});				
 			}
 			var index = $scope.sugestoes.indexOf(sugestao);
@@ -153,6 +181,8 @@ moduleBiblioteca
             	var sugestao = copiaSugestoes[i]; 
             	$scope.removerSugestao(sugestao);
             }
+            $rootScope.mensagemSucesso = "Sugestões Canceladas!";
+            jQuery('#panelMensagemSucesso').show();            
 		}
 		
 		$rootScope.fecharMensagemSucesso = function(){

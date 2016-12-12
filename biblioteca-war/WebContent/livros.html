@@ -1,3 +1,7 @@
+<head>
+	<meta charset="ISO-8859-1">
+</head>
+
 <div class="page-header">
 	<h2>Cat&aacute;logo de Livros</h2>
 </div>	
@@ -67,11 +71,13 @@
 					<tbody>
 						<tr ng-repeat="reserva in reservas">
 							<td>{{reserva.livro.titulo}}</td>
-							<td>{{reserva.id==null ? 'Não enviada' : reserva.situacaoReserva.descricao}}</td>
+							<td>{{reserva.id==null ? 'N&atilde;o enviada' : reserva.situacaoReserva.descricao}}</td>
 							<td>
 								<button style="float: right;" title="Excluir Reserva" data-toggle="tooltip"
 									class="btn btn-xs btn-danger glyphicon glyphicon-trash"
-									ng-click="removerReserva(reserva)"></button>
+									ng-click="removerReserva(reserva)"
+									ng-disabled="!isPodeRemoverReserva(reserva)">
+								</button>
 
 							</td>
 						</tr>
@@ -103,11 +109,13 @@
 					<tbody>
 						<tr ng-repeat="sugestao in sugestoes">
 							<td>{{sugestao.livro.titulo}}</td>
-							<td>{{sugestao.id==null ? 'Não enviada' : sugestao.situacaoSugestao.descricao}}</td>
+							<td>{{sugestao.id==null ? 'N&atilde;o enviada' : sugestao.situacaoSugestao.descricao}}</td>
 							<td>
-								<button style="float: right;" title="Excluir Sugestão" data-toggle="tooltip"
+								<button style="float: right;" title="Excluir Sugest&atilde;o" data-toggle="tooltip"
 									class="btn btn-xs btn-danger glyphicon glyphicon-trash"
-									ng-click="removerSugestao(sugestao)"></button>
+									ng-click="removerSugestao(sugestao)"
+									ng-disabled="!isPodeRemoverSugestao(sugestao)">
+								</button>
 
 							</td>
 						</tr>

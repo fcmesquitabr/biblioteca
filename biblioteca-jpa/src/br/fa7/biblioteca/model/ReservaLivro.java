@@ -40,7 +40,10 @@ public class ReservaLivro implements Serializable{
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataEmprestimo;
-	
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataDevolucao;
+
 	public ReservaLivro() {
 		super();
 	}
@@ -121,5 +124,13 @@ public class ReservaLivro implements Serializable{
 
 	public void setDataEmprestimo(Date dataEmprestimo) {
 		this.dataEmprestimo = dataEmprestimo;
-	}	
+	}
+
+	public Date getDataDevolucao() {
+		return dataDevolucao;
+	}
+
+	public void setDataDevolucao(Date dataDevolucao) {
+		this.dataDevolucao = dataDevolucao;
+	}			
 }

@@ -42,17 +42,12 @@ public class PedidoMDB implements MessageListener{
 	
 	@Override
 	public void onMessage(Message message) {		
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-
-		if(message == null) return;
 		
-		TextMessage textMessage = null;
+		if(message == null) return;
+		aguardarParaProcessarMensagem();
+		
 		try {
+			TextMessage textMessage = null;
 			if (message instanceof TextMessage) {
 				textMessage = (TextMessage) message;
 				enviarPedidoParaDistribuidora(Integer.parseInt(textMessage.getText()));
@@ -62,6 +57,14 @@ public class PedidoMDB implements MessageListener{
 		} catch (JMSException e) {
 			throw new RuntimeException(e);
 		}	
+	}
+
+	private void aguardarParaProcessarMensagem() {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	private void enviarPedidoParaDistribuidora(Integer pedidoId) {
