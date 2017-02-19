@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.UUID;
 
 public class Order implements Serializable {
 
